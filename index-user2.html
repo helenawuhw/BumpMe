@@ -22,8 +22,8 @@
 
 	<script>
 		var initialDataLoaded = false;
-		var user = "user1";
-		var against_user = "user2";
+		var user = "user2";
+		var against_user = "user1";
 		var unit = 0.01;
 		var apikey = '4251fb7f94e1e834bdaae6f55dd61b48';
 		var accountId = '5712d9d801c7065b0fceb542';
@@ -42,14 +42,15 @@
 			if (initialDataLoaded){
 					var msg = new_event.val();
 				var calorie_diff;
-				console.log(msg.userone.name);
-				if(msg.userone.name == 'user2'){
+				if(msg.userone.name == user){
 					calorie_diff = msg.userone.calorie - msg.usertwo.calorie; // self comes first
 				}
 				else{
-					calorie_diff = msg.usertwo.calorie - msg.userone.calories; // self comes first
+					calorie_diff = msg.usertwo.calorie - msg.userone.calorie; // self comes first
 				}
+				console.log(calorie_diff);
 				if (calorie_diff < 0){
+					console.log("i pay");
 					// you gotta pay the other one;
 					transfer = parseFloat(calorie_diff * unit);
 					var d = new Date();
@@ -60,7 +61,7 @@
 					  	"payee_id": payee_accountId,
 					  	"transaction_date": date,
 					  	"description": "run",
-					  	"amount": transfer
+					  	"amount": Math.abs(transfer)
 					});
 					console.log(datum);
 					$.ajax({

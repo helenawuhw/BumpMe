@@ -43,13 +43,15 @@
 					var msg = new_event.val();
 				var calorie_diff;
 				console.log(msg.userone.name);
-				if(msg.userone.name == 'user1'){
+				if(msg.userone.name == user){
 					calorie_diff = msg.userone.calorie - msg.usertwo.calorie; // self comes first
 				}
 				else{
-					calorie_diff = msg.usertwo.calorie - msg.userone.calories; // self comes first
+					calorie_diff = msg.usertwo.calorie - msg.userone.calorie; // self comes first
 				}
+				console.log(calorie_diff);
 				if (calorie_diff < 0){
+					console.log("i pay");
 					// you gotta pay the other one;
 					transfer = parseFloat(calorie_diff * unit);
 					var d = new Date();
@@ -60,7 +62,7 @@
 					  	"payee_id": payee_accountId,
 					  	"transaction_date": date,
 					  	"description": "run",
-					  	"amount": transfer
+					  	"amount": Math.abs(transfer)
 					});
 					console.log(datum);
 					$.ajax({
