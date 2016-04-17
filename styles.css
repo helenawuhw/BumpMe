@@ -17,6 +17,14 @@ body{
 	left:10%;
 }
 
+#unit_cal{
+	top:200px;
+	font-size:24px;
+	color:#c51b8a;
+	position:absolute;
+	left:15%;
+}
+
 .fa{
 	font-size:72px;
 	position: absolute;
@@ -37,6 +45,15 @@ body{
 	-webkit-transform: translate(-50%, 0); 
 	left:52%;
 
+}
+
+#unit_dis{
+	top:200px;
+	font-size:24px;
+	color:#fd8d3c;
+	position:absolute;
+	left:52%;
+		-webkit-transform: translate(-50%, 0); 
 }
 
 .fa-money{

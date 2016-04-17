@@ -86,9 +86,7 @@
   font-weight: 100;
   background-size: 16px 16px;
 }
-.odometer.odometer-auto-theme .odometer-digit, .odometer.odometer-theme-plaza .odometer-digit {
-  color: #648baf;
-}
+
 .odometer.odometer-auto-theme .odometer-digit .odometer-digit-inner, .odometer.odometer-theme-plaza .odometer-digit .odometer-digit-inner {
   left: 0.03em;
 }
