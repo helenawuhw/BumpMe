@@ -13,7 +13,7 @@
 	<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
 	<script src="odometer.min.js"></script>
 	<link rel="stylesheet" href="styles.css" />
-
+	<script src="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
 
 </head>
 <body>
@@ -49,17 +49,25 @@
 	<div id="steps">Daily Steps</div>
 
 	<script>
+		var user1data = new Firebase('https://user1data.firebaseio.com/');
+		var total_calories;
+		var total_distance;	
+		user1data.on("value", function(snap) {
+		  total_calories = snap.val().calories;
+		  total_distance = snap.val().distance;
+		});
+
 		var initialDataLoaded = false;
 		var user = "user1";
 		var against_user = "user2";
-		var unit = 0.01;
+		var unit = 10;
 		var apikey = '4251fb7f94e1e834bdaae6f55dd61b48';
 		var accountId = '5712bd2f01c7065b0fceb52a';
 		var payee_accountId = "5712d9d801c7065b0fceb542";
 		var db = new Firebase('https://bumpup.firebaseio.com/');
 
-		var time_user = '200001010000'
-		var	time_against = '199912310000'
+		var time_user = '200001010000';
+		var	time_against = '199912310000';
 		 // with jQuery
 		
 		   	$.ajax({
@@ -82,8 +90,17 @@
 					msg_against = msg;
 				}
 
-				if(time_use==time_against){
-					var calorie_diff = msg_user.user.calorie - msg.user.calorie; // self comes first
+				if(time_user==time_against){
+					var calorie_diff = msg_user.user.calorie - msg_against.user.calorie; // self comes first
+
+					total_calories = total_calories + msg_user.user.calorie;
+
+					total_distance = total_distance + msg_user.user.distance;
+
+					$('#cal').text(total_calories);
+					$('#distance').text(total_distance);
+
+					user1data.set({calories: total_calories, distance: total_distance});
 					
 					console.log(calorie_diff);
 					if (calorie_diff < 0){
@@ -100,6 +117,8 @@
 						  	"description": "run",
 						  	"amount": Math.abs(transfer)
 						});
+
+
 						console.log(datum);
 						$.ajax({
 							url:'http://api.reimaginebanking.com/accounts/'+ accountId + '/transfers?key=' + apikey,
@@ -152,14 +171,13 @@
 
 <br><br><br><br><br><br><br><br><br><br><br><br>
 	<center><div style="height:500px; width:750px;" class="ct-chart"></div>
-	    <script src="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
 
 	<script>
 
 	var chart = new Chartist.Line('.ct-chart', {
   labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
   series: [
-    [12, 9, 7, 8, 5, 4, 6, 2, 3, 3, 4, 6]
+    [12, 9, 7, 8, 5, 4, 6, 2, 3, 3, 4, 50]
   ]
 }, {
   low: 0
@@ -173,111 +191,6 @@ var seq = 0,
 // Once the chart is fully created we reset the sequence
 chart.on('created', function() {
   seq = 0;
-});
-
-// On each drawn element by Chartist we use the Chartist.Svg API to trigger SMIL animations
-chart.on('draw', function(data) {
-  seq++;
-
-  if(data.type === 'line') {
-    // If the drawn element is a line we do a simple opacity fade in. This could also be achieved using CSS3 animations.
-    data.element.animate({
-      opacity: {
-        // The delay when we like to start the animation
-        begin: seq * delays + 1000,
-        // Duration of the animation
-        dur: durations,
-        // The value where the animation should start
-        from: 0,
-        // The value where it should end
-        to: 1
-      }
-    });
-  } else if(data.type === 'label' && data.axis === 'x') {
-    data.element.animate({
-      y: {
-        begin: seq * delays,
-        dur: durations,
-        from: data.y + 100,
-        to: data.y,
-        // We can specify an easing function from Chartist.Svg.Easing
-        easing: 'easeOutQuart'
-      }
-    });
-  } else if(data.type === 'label' && data.axis === 'y') {
-    data.element.animate({
-      x: {
-        begin: seq * delays,
-        dur: durations,
-        from: data.x - 100,
-        to: data.x,
-        easing: 'easeOutQuart'
-      }
-    });
-  } else if(data.type === 'point') {
-    data.element.animate({
-      x1: {
-        begin: seq * delays,
-        dur: durations,
-        from: data.x - 10,
-        to: data.x,
-        easing: 'easeOutQuart'
-      },
-      x2: {
-        begin: seq * delays,
-        dur: durations,
-        from: data.x - 10,
-        to: data.x,
-        easing: 'easeOutQuart'
-      },
-      opacity: {
-        begin: seq * delays,
-        dur: durations,
-        from: 0,
-        to: 1,
-        easing: 'easeOutQuart'
-      }
-    });
-  } else if(data.type === 'grid') {
-    // Using data.axis we get x or y which we can use to construct our animation definition objects
-    var pos1Animation = {
-      begin: seq * delays,
-      dur: durations,
-      from: data[data.axis.units.pos + '1'] - 30,
-      to: data[data.axis.units.pos + '1'],
-      easing: 'easeOutQuart'
-    };
-
-    var pos2Animation = {
-      begin: seq * delays,
-      dur: durations,
-      from: data[data.axis.units.pos + '2'] - 100,
-      to: data[data.axis.units.pos + '2'],
-      easing: 'easeOutQuart'
-    };
-
-    var animations = {};
-    animations[data.axis.units.pos + '1'] = pos1Animation;
-    animations[data.axis.units.pos + '2'] = pos2Animation;
-    animations['opacity'] = {
-      begin: seq * delays,
-      dur: durations,
-      from: 0,
-      to: 1,
-      easing: 'easeOutQuart'
-    };
-
-    data.element.animate(animations);
-  }
-});
-
-// For the sake of the example we update the chart every time it's created with a delay of 10 seconds
-chart.on('created', function() {
-  if(window.__exampleAnimateTimeout) {
-    clearTimeout(window.__exampleAnimateTimeout);
-    window.__exampleAnimateTimeout = null;
-  }
-  window.__exampleAnimateTimeout = setTimeout(chart.update.bind(chart), 12000);
 });
 	</script>
 
