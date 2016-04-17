@@ -54,6 +54,9 @@
 		var accountId = '5712bd2f01c7065b0fceb52a';
 		var payee_accountId = "5712d9d801c7065b0fceb542";
 		var db = new Firebase('https://bumpup.firebaseio.com/');
+
+		var time_user = '200001010000'
+		var	time_against = '199912310000'
 		 // with jQuery
 		
 		   	$.ajax({
@@ -65,69 +68,77 @@
 		
 		db.on('child_added', function(new_event){
 			if (initialDataLoaded){
-					var msg = new_event.val();
-				var calorie_diff;
-				console.log(msg.userone.name);
-				if(msg.userone.name == user){
-					calorie_diff = msg.userone.calorie - msg.usertwo.calorie; // self comes first
+				var msg = new_event.val();
+
+				if(msg.user.name == user){
+					time_user = msg.info.time;
+					msg_user = msg;
 				}
 				else{
-					calorie_diff = msg.usertwo.calorie - msg.userone.calorie; // self comes first
+					time_against = msg.info.time;
+					msg_against = msg;
 				}
-				console.log(calorie_diff);
-				if (calorie_diff < 0){
-					console.log("i pay");
-					// you gotta pay the other one;
-					transfer = parseFloat(calorie_diff * unit);
-					var d = new Date();
-					var date = d.getFullYear() + '-' + ('0' + String(d.getMonth()+1)).slice(-2) + '-' + d.getDate();
 
-					var datum = JSON.stringify({
-					  	"medium": "balance",
-					  	"payee_id": payee_accountId,
-					  	"transaction_date": date,
-					  	"description": "run",
-					  	"amount": Math.abs(transfer)
-					});
-					console.log(datum);
-					$.ajax({
-						url:'http://api.reimaginebanking.com/accounts/'+ accountId + '/transfers?key=' + apikey,
-						data: datum,
-						type:'POST',
-						contentType:'application/json',
-						success: function (dat) {
-		                	$('#message').html(dat.message);
-	            		}
-			    	});
-				}
+				if(time_use==time_against){
+					var calorie_diff = msg_user.user.calorie - msg.user.calorie; // self comes first
 					
-				
-			    function waitAjax(){
-			    	$.ajax({
-			    	url: 'http://api.reimaginebanking.com/accounts/' + accountId + '?key='+apikey,
-			    	success: function(results){
-			    	console.log('ss');
-			        balance = results['balance'];  
-			    }});
-			    }
+					console.log(calorie_diff);
+					if (calorie_diff < 0){
+						console.log("i pay");
+						// you gotta pay the other one;
+						transfer = parseFloat(calorie_diff * unit);
+						var d = new Date();
+						var date = d.getFullYear() + '-' + ('0' + String(d.getMonth()+1)).slice(-2) + '-' + d.getDate();
 
-			   	function updateBalance(){
-			   		var value = balance;
-			   		var id = setInterval(function(){
-			   			if(value!=balance){
-			   				$('.odometer').text(balance);
-			   				clearInterval(id);
-			   			}
-			   			else{
-			   				waitAjax();
-			   			}
-			   		}, 1000);
+						var datum = JSON.stringify({
+						  	"medium": "balance",
+						  	"payee_id": payee_accountId,
+						  	"transaction_date": date,
+						  	"description": "run",
+						  	"amount": Math.abs(transfer)
+						});
+						console.log(datum);
+						$.ajax({
+							url:'http://api.reimaginebanking.com/accounts/'+ accountId + '/transfers?key=' + apikey,
+							data: datum,
+							type:'POST',
+							contentType:'application/json',
+							success: function (dat) {
+			                	$('#message').html(dat.message);
+		            		}
+				    	});
+					}
+						
+					
+				    function waitAjax(){
+				    	$.ajax({
+				    	url: 'http://api.reimaginebanking.com/accounts/' + accountId + '?key='+apikey,
+				    	success: function(results){
+				    	console.log('ss');
+				        balance = results['balance'];  
+				    }});
+				    }
 
-			   	}
+				   	function updateBalance(){
+				   		var value = balance;
+				   		var id = setInterval(function(){
+				   			if(value!=balance){
+				   				$('.odometer').text(balance);
+				   				clearInterval(id);
+				   			}
+				   			else{
+				   				waitAjax();
+				   			}
+				   		}, 1000);
 
-			   	// Delete setTimeout after working
-			   	updateBalance();
-				
+				   	}
+
+				   	// Delete setTimeout after working
+				   	updateBalance();
+					
+				}
+
+
 			}
 			
 		})
