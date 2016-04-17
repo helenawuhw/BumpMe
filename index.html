@@ -15,15 +15,22 @@
 		111
 	</div>
 	<button id="button">
-		sss
+		Get my Balance
 	</button>
 
 	<script>
 		var db = new Firebase('https://bumpup.firebaseio.com/');
 		 // with jQuery
 		
-    		$('#button').click(function(){$('.odometer').text(123)});
-   
+		   	$.ajax({
+		    url: 'http://api.reimaginebanking.com/accounts/5712bd2f01c7065b0fceb52a?key=4251fb7f94e1e834bdaae6f55dd61b48',
+		    success: function(results){
+		        balance = results['balance'];
+		        
+		    }});
+		    $('#button').click(function(){$('.odometer').text(balance)});
+
+		
 	</script>
 </body>
 <html>
