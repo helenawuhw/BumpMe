@@ -6,12 +6,25 @@
 	<title>BumpUp</title>
 	<script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
 	<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script>
-	<link rel="stylesheet" href="odometer-theme-default.css" />
+	<link rel="stylesheet" href="odometer-theme-plaza.css" />
+	<link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
+	<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
 	<script src="odometer.min.js"></script>
+	<link rel="stylesheet" href="styles.css" />
+
 </head>
 <body>
-	
-	<div class='odometer'>
+	<i class="fa fa-fire" aria-hidden="true"></i>
+	<div id='cal'>355KCal</div>
+
+
+	<i class="fa fa-map" aria-hidden="true"></i>
+	<div id ='distance'>3.56mi</div>
+
+
+	<i class="fa fa-money" aria-hidden="true"></i>
+	<div class='dollar'>$</div>
+	<div class='odometer money'>
 		111
 	</div>
 	<button id="button">
@@ -19,6 +32,20 @@
 	</button>
 	<div id = 'message'>
 	</div>
+
+	
+	<!-- Transactions --> 
+	<i class="fa fa-exchange" aria-hidden="true"></i>
+	<div id="transaction">
+		Recent
+	</div>
+	<ul id = "list">
+		<li>www</li>
+	</ul>
+
+	<i class="fa fa-flag-checkered" aria-hidden="true"></i>
+	<div id="steps">Daily Steps</div>
+
 
 	<script>
 		var initialDataLoaded = false;

@@ -1,0 +1,113 @@
+body{
+	background-color: #f0f8ff;
+	font-family: "Helvetica Neue", sans-serif;
+	font-weight: 100;
+}
+
+.fa-fire{
+	left:5%;
+	color:#c51b8a;
+}
+
+#cal{
+	top:100px;
+	font-size: 72px;
+	color:#c51b8a;
+	position: absolute;
+	left:10%;
+}
+
+.fa{
+	font-size:72px;
+	position: absolute;
+	top:110px;
+}
+
+.fa-map{
+	-webkit-transform: translate(-50%, 0); 
+	left:39%;
+	color:#fd8d3c;
+}
+
+#distance{
+	top:100px;
+	font-size: 72px;
+	color:#fd8d3c;
+	position: absolute;
+	-webkit-transform: translate(-50%, 0); 
+	left:52%;
+
+}
+
+.fa-money{
+	-webkit-transform: translate(-50%, 0); 
+	top:115px;
+	font-size:72px;
+	position: absolute;
+	color:#648baf;
+	left:70%;
+}
+
+.dollar{
+	position: absolute;
+	left: 76%;
+	top:97px;
+	color:#648baf;
+	font-size: 72px;
+	float:left;
+  	font-weight: 100;
+  	-webkit-transform: translate(-50%, 0); 
+
+}
+.money{
+	position: absolute;
+	left:80%;
+	top:95px;
+	color:#648baf;
+	font-size: 72px;
+
+}
+
+
+.fa-exchange{
+	position: absolute;
+	left:5%;
+	top:250px;
+	color:#006d2c;
+}
+
+#transaction{
+	position: absolute;
+	left:13%;
+	top:250px;
+	font-size: 48px;
+	color:#006d2c;
+}
+
+#list{
+	position: absolute;
+	left:5%;
+	top: 300px;
+	color: #006d2c;
+}
+
+
+
+
+
+
+.fa-flag-checkered{
+	position: absolute;
+	-webkit-transform: translate(-50%, 0); 
+	left:39%;
+	font-size:72px;
+	top: 250px;
+}
+
+#steps{
+	position: absolute;
+	left:45%;
+	top:250px;
+	font-size: 48px;
+}
+
