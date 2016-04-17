@@ -21,6 +21,7 @@
 	</div>
 
 	<script>
+		var initialDataLoaded = false;
 		var user = "user1";
 		var against_user = "user2";
 		var unit = 0.01;
@@ -38,62 +39,74 @@
 		    }});
 		
 		db.on('child_added', function(new_event){
-			var msg = new_event.val();
-			var calorie_diff;
-			console.log(msg.userone.name);
-			if(msg.userone.name == 'user1'){
-				calorie_diff = msg.userone.calorie - msg.usertwo.calorie;
-				transfer = parseFloat(calorie_diff * unit);
+			if (initialDataLoaded){
+					var msg = new_event.val();
+				var calorie_diff;
+				console.log(msg.userone.name);
+				if(msg.userone.name == 'user1'){
+					calorie_diff = msg.userone.calorie - msg.usertwo.calorie; // self comes first
+				}
+				else{
+					calorie_diff = msg.usertwo.calorie - msg.userone.calories; // self comes first
+				}
+				if (calorie_diff < 0){
+					// you gotta pay the other one;
+					transfer = parseFloat(calorie_diff * unit);
+					var d = new Date();
+					var date = d.getFullYear() + '-' + ('0' + String(d.getMonth()+1)).slice(-2) + '-' + d.getDate();
+
+					var datum = JSON.stringify({
+					  	"medium": "balance",
+					  	"payee_id": payee_accountId,
+					  	"transaction_date": date,
+					  	"description": "run",
+					  	"amount": transfer
+					});
+					console.log(datum);
+					$.ajax({
+						url:'http://api.reimaginebanking.com/accounts/'+ accountId + '/transfers?key=' + apikey,
+						data: datum,
+						type:'POST',
+						contentType:'application/json',
+						success: function (dat) {
+		                	$('#message').html(dat.message);
+	            		}
+			    	});
+				}
+					
 				
-			var d = new Date();
-			var date = d.getFullYear() + '-' + ('0' + String(d.getMonth()+1)).slice(-2) + '-' + d.getDate();
+			    function waitAjax(){
+			    	$.ajax({
+			    	url: 'http://api.reimaginebanking.com/accounts/' + accountId + '?key='+apikey,
+			    	success: function(results){
+			    	console.log('ss');
+			        balance = results['balance'];  
+			    }});
+			    }
 
-			var datum = JSON.stringify({
-				  	"medium": "balance",
-				  	"payee_id": payee_accountId,
-				  	"transaction_date": date,
-				  	"description": "run",
-				  	"amount": transfer
-				});
-			console.log(datum);
-			$.ajax({
-				url:'http://api.reimaginebanking.com/accounts/'+ accountId + '/transfers?key=' + apikey,
-				data: datum,
-				type:'POST',
-				contentType:'application/json',
-				success: function (dat) {
-                	$('#message').html(dat.message);
-            	}
+			   	function updateBalance(){
+			   		var value = balance;
+			   		var id = setInterval(function(){
+			   			if(value!=balance){
+			   				$('.odometer').text(balance);
+			   				clearInterval(id);
+			   			}
+			   			else{
+			   				waitAjax();
+			   			}
+			   		}, 1000);
 
-		    });
-		    function waitAjax(){
-		    	$.ajax({
-		    	url: 'http://api.reimaginebanking.com/accounts/' + accountId + '?key='+apikey,
-		    	success: function(results){
-		    	console.log('ss');
-		        balance = results['balance'];  
-		    }});
-		    }
+			   	}
 
-		   	function updateBalance(){
-		   		var value = balance;
-		   		var id = setInterval(function(){
-		   			if(value!=balance){
-		   				$('.odometer').text(balance);
-		   				clearInterval(id);
-		   			}
-		   			else{
-		   				waitAjax();
-		   			}
-		   		}, 1000);
-
-		   	}
-
-		   	// Delete setTimeout after working
-		   	setTimeout(updateBalance, 5000);
+			   	// Delete setTimeout after working
+			   	updateBalance();
+				
 			}
-
+			
 		})
+	db.once('value', function(snapshot) {
+		  initialDataLoaded = true;
+		});
 	</script>
 </body>
 <html>
