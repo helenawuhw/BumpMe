@@ -1,0 +1,38 @@
+.text-muted {
+	font-family: 'Indie Flower', cursive;
+	font-size: 50px;
+	color: #854A0C;
+}
+
+body{
+	background-color: white;
+  	background: linear-gradient(to bottom, rgba(255,255,255,0.40) 0%,rgba(255,255,255,0.3) 50%),
+              url(../images/background.jpg) no-repeat center center;
+  	background-size: 100% 100%;
+}
+
+a{
+	color: grey;
+}
+
+input {
+    line-height: 2.1em; 
+}
+
+h3{
+	font-family: 'Chewy', cursive;
+}
+
+.nav-tabs{
+	font-family: 'Fredoka One', cursive;
+}
+
+.taglines{
+	font-family: 'Gochi Hand', cursive;
+	font-size: 32px;
+	color: #A86338;
+}
+
+.baby-says{
+	font-family: 'Fredoka One', cursive;
+}
